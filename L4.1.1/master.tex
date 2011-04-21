@@ -1,0 +1,40 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{url}
+\usepackage[deliverable]{CompatibleOneCoverPage}
+
+\title{Compatible One: Livrable 4.1.1\\
+Expression des besoins\\
+et spécifications techniques\\
+pour la GED en ligne}
+\date{April 21, 2011}
+\author{Stefane Fermigier, Thierry Delprat, Florent Guillaume,\\
+Mathieu Guillaume, Olivier Grisel, Bogdan Stefanescu}
+
+\makeindex
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+
+\pagebreak
+
+\begin{abstract}
+  Ce document présente un scénario de migration de la plateforme d'ECM open source Nuxeo et des solutions associées vers une infrastructures cloud générique, incarnée par les services du IaaS (SP1) et du PaaS (SP2) de Compatible One.
+  
+  Dans une première partie, plusieurs étapes sont définies qui correspondent à un enchaînement logique et une prise de risque tecnologique croissante. Pour chacune, sont précisés le contexte actuel, les enjeux business et les défis techniques associés. Chaque étape doit aboutir à un démonstrateur qui permettra de juger de la pertinence de l'approche et de son potentiel d'industrialisation.
+  
+  Dans une deuxième partie, les prerequis qu'implique le développement de ces démonstrateurs pour les autres source projets du projet Compatible One (notamment SP1 et SP2) sont développés, afin de permettre aux membres du consortium qui travaillent sur ces sous-projets d'orienter leurs travaux dans le sens souhaité.
+
+  Compte-tenu de la nature itérative du projet, ce document sera mis à jour de manière itérative, en fonction des leçons acquires et de l'avancement des autres SP.
+\end{abstract}
+
+\input{main.tex}
+\input{general-requirements.tex}
+\input{sp1-requirements.tex}
+
+\end{document}
