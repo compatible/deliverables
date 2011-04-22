@@ -95,7 +95,7 @@ industrialisés.
         
 ### Principales tâches
 
-Nous listons ci-après les principales tâches que nous pensons nécessaire d'accomplir pour démontrer la pertinence du cloud Compatible One dans le cadre ainsi fixé:
+Nous listons ci-après les principales tâches que nous pensons nécessaire d'ac\-complir pour démontrer la pertinence du cloud Compatible One dans le cadre ainsi fixé:
 
 -   Utiliser les outils de SP1.2 (Administration de machines virtuelles)
     pour provisionner et administrer des machines virtuelles contenant
@@ -198,7 +198,7 @@ Nous listons ci-après les prérequis sur les autres SP induits par le use case 
 
 ### Contexte
 
-Un objectif stratégique pour Nuxeo est d'encourager le développement d’applications verticales (aussi appelées CEVAs pour "Content Enabled Vertical Applications" ou CCA pour "Composite Content Applications)
+Un objectif stratégique pour Nuxeo est d'encourager le développement d’app\-li\-cations verticales (aussi appelées CEVAs pour "Content Enabled Vertical Applications" ou CCA pour "Composite Content Applications)
 au-dessus de sa plateforme, par des développeurs tiers.
 
 Afin de rendre cette approche attractive pour les développeurs, Nuxeo
@@ -269,7 +269,7 @@ paradigmes de la plateforme Nuxeo, notamment son interface utilisateur.
 ### Challenges
 
 -   Implémenter le service après découpage adéquat des composants
-    serveurs Nuxeo.
+    ser\-veurs Nuxeo.
 
 -   Démontrer la pertinence des API par un ensemble de démonstrateurs
 

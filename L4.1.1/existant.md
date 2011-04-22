@@ -44,6 +44,6 @@ Suite à l'utilisation quotidienne de l'infrastructure actuelle, les éléments 
 
 - Bases de données PostgreSQL en PaaS (type RDS)
 
-- Diverses autres fonctionnalités en PaaS: reverse-proxy HTTP/HTTPS, relai SMTP vers un hôte ou une liste d'hôtes données (puisque n'importe quel cloud public va de toutes façons se retrouver dans les blacklists anti-spam), SMSC, AMQP...
+- Diverses autres fonctionnalités en PaaS: reverse-proxy HTTP/HTTPS, relai SMTP vers un hôte ou une liste d'hôtes données (puisque n'im\-por\-te quel cloud public va de toutes façons se retrouver dans les blacklists anti-spam), SMSC, AMQP...
 
 - Conversion des VMs entre plusieurs architectures de virtualisation, pour pouvoir migrer simplement de l'une à l'autre, passer d'un fournisseur à un autre, ou d'un cloud privé à un cloud public (et inversement).
