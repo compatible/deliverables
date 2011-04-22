@@ -18,7 +18,7 @@ Les compromis à effectuer et les choix des technologies afférentes, seront ré
 
 # Architecture générale
 
-**NB: Cette partie devrait probablement être bougée dans un document commun aux SP du SP2.**
+**NB: Cette partie devrait probablement être bougée dans un document commun aux SP du SP2.** 
 
 Pour bien comprendre les enjeux de ce SP, comme d'ailleurs pour la plupart des autres liés au PaaS, il convient de bien distinguer des considérations qui devraient en principes être orthogonales:
 
@@ -32,10 +32,28 @@ Mais aussi:
 
 - *Les APIs* d'accès aux services: selon le langage utilisé (ex: Java, Python...), une ou plusieurs API privilégiées peuvent être fournies aux développeurs, notamment dans le cadre du runtime PaaS, sans que cela constitue une obligation de les utiliser.
 
+Détaillons à présent un peu plus ces différents point.
+
 ## La gestion des services
 
-**TODO**: Détailler.
+La proposition de valeur du cloud pour les développeurs, c'est, en théorie, de leur permettre de s'abstraire totalement de la gestion des services nécessaires au fonctionnement de leurs applications (SGBD, bus de messages, cache, etc.).
 
+L'expérience (car c'est bien ainsi qu'il faut l'appeler) Google AppEngine montre qu'un PaaS entièrement fondé sur ces principes impose des restrictions considérables aux développeurs -- pas de thread, temps que réponse limité pour chaque requète, modèle de persistence éloigné du modèle relationnel, pas d'accès au filesystème, etc. -- qui rendent l'expérience très contraignante, et pour tout dire insatisfaisante pour la plupart des développeurs.
+
+Force est donc de constater que le terme "PaaS" englobe deux types de services:
+
+- Des services véritablement "internet scale", élastiques, où les développeurs peuvent puiser dans un pool de resources virtuellement infini et son facturés en fonction uniquement de leur usage effectif de ces resources.
+
+  Des exemples de tels services sont Amazon S3, Google BigTable ou le runtime de Google AppEngine.
+
+- Des services à la scalabilité plus limitée, qui impliquent lors de leur instanciation la réservation de resources dédiés (VM, stockage, etc.). 
+
+  Des exemples de tels services sont Amazon RDS ou EC2.
+
+En pratique, on ne peut pas pour des raisons fondamentales, pour un certain nombre de services faire une abstraction totale de la façon dont ceux-ci sont configurés et provisionnés, 
+
+La méthode de gestion des services pour le PaaS 
+  
 ## L'utilisation des services
 
 **TODO**: Détailler.
@@ -43,25 +61,32 @@ Mais aussi:
 
 # Stockage relationnel
 
-Le stockage relationnel est le fondement la majorité des applications d'entreprises depuis une trentaine d'années.
+Le stockage relationnel est le fondement la majorité des applications d'entreprises depuis une trentaine d'années, et plus récemment, depuis les années 2000 et l'avênement des architecture LAMP (Linux + Apache + MySQL + Perl/Python/PHP) ainsi que de ses variantes (e.g. Mysql + Ruby on Rails) pour les applications web.
 
-Même si le passage
+L'augmentation du traffic des sites web depuis 10 ans, mais aussi l'apparition de nouveaux modes d'interaction plus participatifs ("Web 2.0") ont entraîné une explosion des besoins sur les SGBDR utilisés dans ce contexte, avec pour conséquence:
+
+- Le développement de mécanismes permettant d'augmenter le point à partir duquel les SGBDR ne peuvent plus suivre (ex: réplication master-slave et master-master) ou de techniques de programmation qui permettent de contourner ces contraintes (ex: sharding).
+
+- Le constat que le modèle relationnel ne permet pas une scalabilité infinie, et qu'il n'est pas non plus adapté à tous les besoins actuels[^0], et l'apparition subséquente de nouveaux modèles, popularisés à présent sous le nom "NoSQL".
+
+[^0]: Michael Stonebraker, *The End of a DBMS Era (Might be Upon Us)*, <http://cacm.acm.org/blogs/blog-cacm/32212-the-end-of-a-dbms-era-might-be-upon-us/fulltext>
+
 
 ## Modèle
 
-Le modèle relationnel est un modèle bien ancré dans un formalisme mathématique [Codd...] et dans des specifications [SQL 98, etc.]
+Le modèle relationnel est un modèle bien ancré dans un formalisme mathématique [Codd...] et dans des specifications établies de longue date [SQL 98, etc.].
 
 Néanmoins force est de constater que deux SGBDR ne sont jamais interchangeables.
 
 ## Implémentations
 
-Deux SBGDR open source sont considérés comme les leaders: MySQL[^2] et Postgresql. 
+Deux SBGDR open source sont considérés comme les leaders: MySQL[^1] et Postgresql. 
 
-[^2] La situation est rendue un peu plus compliquée suite au rachat de Sun par Oracle et aux nombreux forks qui ont suivi: Drizzle, Skysql, MariaDB, etc.
+[^1]: La situation est rendue un peu plus compliquée suite au rachat de Sun par Oracle et aux nombreux forks qui ont suivi: Drizzle, Skysql, MariaDB, etc.
 
-Compte-tenu de ceci, et du fait que les différents SGBDR open source (ou non) du marché présentent des caractéristiques qui les rendent plus ou moins compétitifs selon les applications[^3], il ne paraît pas pertinent d'en choisir un plutôt qu'un autre, mais il convient plutôt à notre sens de donner la possibilité d'utiliser l'un ou l'autre, et plus généralement aux fournisseurs ou au gestionnaire de cloud d'instancier facilement d'autres SGBDR en utilisant un modèle et des API de provisionning similaires.
+Compte-tenu de ceci, et du fait que les différents SGBDR open source (ou non) du marché présentent des caractéristiques qui les rendent plus ou moins compétitifs selon les applications[^2], il ne paraît pas pertinent d'en choisir un plutôt qu'un autre, mais il convient plutôt à notre sens de donner la possibilité d'utiliser l'un ou l'autre, et plus généralement aux fournisseurs ou au gestionnaire de cloud d'instancier facilement d'autres SGBDR en utilisant un modèle et des API de provisionning similaires.
 
-[^3] Par exemple, le cas d'utilisation SP4.1 (Nuxeo) exprime une préférence nette pour Postgresql, alors que le cas SP4.2 (XWiki) semble plutôt privilégier MySQL.
+[^2]: Par exemple, le cas d'utilisation SP4.1 (Nuxeo) exprime une préférence nette pour Postgresql, alors que le cas SP4.2 (XWiki) semble plutôt privilégier MySQL.
 
 ## Protocoles
 
@@ -69,9 +94,9 @@ Chaque SGBDR implémente en général son propre protocole, en général binaire
 
 Il serait illusoire pour le projet Compatible One de proposer un protocole unique indépendant du SGBDR utilisé, d'autant que ça ne résoudrait pas la question des spécificités sous-jacentes.
 
-Il peut cependant être intéressant d'explorer la possibilité d'encapsuler l'accès à ces SGBD dans des appels JSON en HTTP, comme suggéré dans *HTTP JSON AlsoSQL interface to Drizzle*[^1].
+Il peut cependant être intéressant d'explorer la possibilité d'encapsuler l'accès à ces SGBD dans des appels JSON en HTTP, comme suggéré dans *HTTP JSON AlsoSQL interface to Drizzle*[^3].
 
-[^1]: <http://www.flamingspork.com/blog/2011/04/21/http-json-alsosql-interface-to-drizzle/>.
+[^3]: <http://www.flamingspork.com/blog/2011/04/21/http-json-alsosql-interface-to-drizzle/>.
 
 ## API d'utilisation
 
@@ -113,7 +138,7 @@ HTTP.
 
 Il existe une librairie qui fournit une couche d'abstraction au dessus d'un stockage de blobs type S3: jclouds[^4]
 
-[^4] <http://jclouds.org>
+[^4]: <http://jclouds.org>
 
 ## API de gestion
 
