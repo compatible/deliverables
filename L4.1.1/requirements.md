@@ -1,6 +1,6 @@
-# Requirements for the Nuxeo Pilot (WP 4.1)
+# Requirements
 
-> **Abstract:** This document presents the requirements identified by Nuxeo for the development of the cloud-aware enterprise content management demonstrator, aka WP 4.1.
+NB: pour des raisons historiques, cette partie a été écrite en anglais.
 
 ## High level requirements
 
@@ -84,28 +84,28 @@ For illustration purpose, the target command line could look something like:
 
 where:
 
- - `software-descriptor-url`: is an url pointing to a file listing the top level required bundles
- - `instance-descriptor-url`: is an url pointing to a file containing VM deployment configuration
+- `software-descriptor-url`: is an url pointing to a file listing the top level required bundles
+- `instance-descriptor-url`: is an url pointing to a file containing VM deployment configuration
 
 The expected gains for this switch from maven to an OSGi distribution model are:
 
- - better integration with the low level provisioning systems
+- better integration with the low level provisioning systems
 
- - be able to dynamically add new features by adding new bundles (no restart, just additional activation)
+- be able to dynamically add new features by adding new bundles (no restart, just additional activation)
 
- - be able to dynamically add or refresh configuration bundles
+- be able to dynamically add or refresh configuration bundles
 
 
 These features are very important for running a useful ECM platform on the Cloud:
 
- - we want to be able to easily refresh configuration
+- we want to be able to easily refresh configuration
+  \newline
+  $\Rightarrow$ let end users change some configuration in Nuxeo Studio and directly see the result in his production system
 
-   => let end user change some configuration in Nuxeo Studio and directly see the result in his production system
-
- - we want to let able to add or remove services on a running application instance
-
-   => let the end user subscribe to additional services and features
-     ( without recreating a new instance or restarting the existing one)
+- we want to let able to add or remove services on a running application instance
+  \newline
+  $\Rightarrow$ let the end user subscribe to additional services and features
+   (without recreating a new instance or restarting the existing one)
 
 #### Stay compatible
 
@@ -117,11 +117,11 @@ So, even if we must leverage the Cloud infrastructure, we should still be able t
 
 It provides a smooth migration to the cloud model and allows for a mixed model:
 
- - use Cloud for evaluation or development environment, but deploy on premises for security reasons
+- use Cloud for evaluation or development environment, but deploy on premises for security reasons
 
- - Manage dev and testing in-house but use the Cloud for production hosting
+- Manage dev and testing in-house but use the Cloud for production hosting
 
- - Start with in-house deployment and scales out to the Cloud when needed
+- Start with in-house deployment and scales out to the Cloud when needed
 
 This basically means that there should be a strong decoupling between the application layer and the cloud infrastructure and deployment model.
 
@@ -129,24 +129,23 @@ For that matter, OGSi model provides part of the solution since it standardize s
 
 For on premises deployments we need to be able:
 
- - to propose alternative for the Cloud based features
-   (like standard DB/FS storage)
+- to propose alternative for the Cloud based features (like standard DB/FS storage)
 
- - to run as a standard JEE application
+- to run as a standard JEE application
 
 This second point may seem like a problem, but:
 
- - this problem can be not addressed
+- this problem can be not addressed
 
- - this should not be a big constraint
+- this should not be a big constraint
 
 In fact several application servers have OSGi support, and Nuxeo EP currently deploys OSGi and Nuxeo Components in JBoss 5 and Tomcat 6.
 
 The difficulty will be to disturb as less as possible the people deploying on premises application:
 
-=> this must be as simple and copying a WAR or an EAR
+$\Rightarrow$ this must be as simple and copying a WAR or an EAR
 
-=> it does not means we need to deploy a real WAR or EAR
+$\Rightarrow$ it does not means we need to deploy a real WAR or EAR
    (we can rely on deployment hooks and embedded OSGi runtime)
 
 ### Multi-tenancy
@@ -155,23 +154,23 @@ We have use cases for using Nuxeo DM as a multi-tenant aware platform.
 
 The typical requirements are:
 
- - be able to have per-tenant data 
+- be able to have per-tenant data 
+  \newline
+  $\Rightarrow$ Users from company A can not access the documents from company B.
+  \newline
+  $\Rightarrow$ Company B can ask for a data restore without impacting company A
 
-   => Users from company A can not access the documents from company B.
+- be able to have per-tenant configuration
+  \newline
+  $\Rightarrow$ The InvoiceA document Type is only available for people from company A.
 
-   => Company B can ask for a data restore without impacting company A
+- be able to have per-tenant feature list (available services)
+  \newline
+  $\Rightarrow$ CompanyA has access to a Signature service, but not CompanyB
 
- - be able to have per-tenant configuration
-
-   => The InvoiceA document Type is only available for people from company A.
-
- - be able to have per-tenant feature list (available services)
-
-   => CompanyA has access to a Signature service, but not CompanyB
-
- - be able to do hot-reconfiguration/redeployment on a per-tenant basis
-
-   => CompanyA can do an upgrade without impacting CompanyB
+- be able to do hot-reconfiguration/redeployment on a per-tenant basis
+  \newline
+  $\Rightarrow$ CompanyA can do an upgrade without impacting CompanyB
 
 #### Doing Multi-tenant in the Could
 
@@ -179,13 +178,13 @@ Traditional approaches for managing multi-tenant is to change the application so
 
 This approach has several drawbacks in our case:
 
- - Making multi-tenant aware all software component is hard job
+- Making multi-tenant aware all software component is hard job
 
-   - possibly a lot of work
+  - possibly a lot of work
 
-   - must be addressed for each new feature
+  - must be addressed for each new feature
 
- - Since application level rules may change, the admin work (ex: backup and restore) can become a nightmare
+- Since application level rules may change, the admin work (ex: backup and restore) can become a nightmare
 
 A brute force approach would be to say that since of the Cloud the resources are virtually unlimited, we can simply clone a new instance for each client.
 
@@ -199,9 +198,9 @@ From a high level point of view, we want to be able to run several OSGi distribu
 
 So for example, if user's Principal contains information about a Tenant:
 
- - we should be able to make available some services or not
+- we should be able to make available some services or not
 
- - we should be able to take into account one configuration bundle or an other
+- we should be able to take into account one configuration bundle or an other
 
 My understanding is that there are currently discussion somehow related to these problematics in the OSGi/P2/Virgo community.
 
@@ -209,19 +208,19 @@ My understanding is that there are currently discussion somehow related to these
 
 Low level infrastructure is also impacted by the multi-tenant use case:
 
- - impact on backup/restore systems
+- impact on backup/restore systems
 
- - impact on admin and deployment tools
+- impact on admin and deployment tools
 
 #### Nuxeo level requirements 
 
 Even if we have a fully multi-tenant aware infrastructure, there will still be impacts at Nuxeo level.
 
- - OSGi alignments for services
+- OSGi alignments for services
 
- - Improve extension points registries (or align to Equinox system)
+- Improve extension points registries (or align to Equinox system)
 
- - Improve fragment system (or align on OSGi partial standard)
+- Improve fragment system (or align on OSGi partial standard)
 
 ### VM provisioning
 
@@ -237,9 +236,9 @@ In the future we want to leverage distributed storage services like S3. This wil
 
 This will be a new plugin for the Nuxeo Binary Manager:
 
- - using a local filesystem cache (for performance reasons),
+- using a local filesystem cache (for performance reasons),
 
- - using as much as possible a neutral distributed file system API (as provided for instance by the jclouds BlobStore project).
+- using as much as possible a neutral distributed file system API (as provided for instance by the jclouds BlobStore project).
 
 ### NoSQL storage
 
@@ -249,14 +248,14 @@ The target is to be able to have a theoretically infinite-scale storage for the 
 
 This task is significantly more complex that simply addressing binaries storage since we need to be able to:
 
- - manage transactions,
+- manage transactions,
 
- - manage locking,
+- manage locking,
 
- - have an efficient query system, with dynamically created queries in
+- have an efficient query system, with dynamically created queries in
 some use cases,
 
- - provide full-text indexing.
+- provide full-text indexing.
 
 To be fair, this does not need to be a real NoSQL storage. Having a large scale RDBMS clustering and sharding system, would be good as well.
 
@@ -268,13 +267,13 @@ The clustering model requires a cache system that can be synched between the Clu
 
 This is currently done:
 
- - using separated in memory "session caches":
+- using separated in memory "session caches":
 
-    - there is no intra-VM shared cache
+  - there is no intra-VM shared cache
 
-    - there is no multi-VM shared cache
+  - there is no multi-VM shared cache
 
- - multi-VM sync go through the database
+- multi-VM sync go through the database
 
 We plan to work on this subject to provide a truly distributed caching system that will can use in Cluster mode on the Cloud.
 

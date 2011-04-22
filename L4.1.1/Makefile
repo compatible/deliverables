@@ -3,7 +3,7 @@
 #
 livrable = L4.1.1
 sources =
-texfiles = main.tex general-requirements.tex sp1-requirements.tex
+texfiles = existant.tex besoins.tex requirements.tex
 
 PDF = $(livrable).pdf
 TEX = $(texfiles)

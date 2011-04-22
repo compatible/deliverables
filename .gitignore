@@ -1,0 +1,6 @@
+.svn
+.DS_Store
+*.aux
+*.dvi
+*.idx
+*.log
