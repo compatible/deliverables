@@ -10,7 +10,7 @@ L’objectif de ce service est de fournir trois types de stockage et un service 
 
 - Composant de caching distribué pour permettre aux applications de pouvoir mémoriser de façon temporaire les résultats des computations afin d’ augmenter les performances. Le composant de caching utilisera une API standard comme l’API JCache, utilisée aussi par Google AppEngine, et sera exposé aussi au travers d’une interface REST.
 
-Il est à noter que loin d'être exclusifs, ces services sont la plupart du temps complémentaires ("NoSQL" signifiant dans ce contexte "Not Only SQL") et utilisés conjointements par 
+Il est à noter que loin d'être exclusifs, ces services sont la plupart du temps complémentaires ("NoSQL" signifiant dans ce contexte "Not Only SQL") et utilisés conjointements par les sites les plus exigeants du moment (Facebok, Twitter, etc.).
 
 Le travail prévu dans cette sous-tache concernera plutôt l’intégration de solutions de caching existants (comme memcached) et du développement pour les intégrer dans la plate-forme Compatible One.
 
@@ -53,11 +53,11 @@ L'expérience (car c'est bien ainsi qu'il faut l'appeler) Google AppEngine montr
 Force est donc de constater que le terme "PaaS" englobe deux types de services:
 
 - Des services véritablement "internet scale", élastiques, où les développeurs peuvent puiser dans un pool de resources virtuellement infini et multitenant, et sont facturés en fonction uniquement de leur usage effectif de ces resources.
-
+  \newline
   Des exemples de tels services sont Amazon S3, Google BigTable ou le runtime de Google AppEngine.
 
 - Des services à la scalabilité plus limitée, qui impliquent lors de leur instanciation la réservation de resources dédiés (VM, stockage, etc.). 
-
+  \newline
   Des exemples de tels services sont Amazon RDS ou EC2.
 
 En pratique, on ne peut pas, pour des raisons fondamentales, pour un certain nombre de services, faire une abstraction totale de la façon dont ceux-ci sont configurés et provisionnés. Il apparaît donc pertinent de proposer à l'utilisateur du PaaS la possibilité, via une API simple, de provisionner de tels services, selon les caractéristiques qui lui conviennent. 
@@ -197,7 +197,7 @@ Amazon facture son service S3 d'une part en fonction du volume stocké, d'autre 
 
 Les limitations, pour le stockage de volume de données massifs "internet scale", du modèle relationnel ont amené depuis 5 ans un certain nombre de développeurs et de startups à créer de nouveau modèles qui présentent des caractéristiques de scalabilité différentes, ou une richesse fonctionnelle plus grande.
 
-Il s'agit d'un écosystème très riche et en évolution permanente (cf. <http://www.mynosql.com>).
+Il s'agit d'un écosystème très riche et en évolution permanente (cf. <http://www.mynosql.com> pour un fil d'actualité sur le sujet et <http://nosql-database.org/> pour une liste extrêmement complète des différents systèmes disponibles aujourd'hui).
 
 TODO: parler du théorème CAP.
 
