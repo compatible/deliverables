@@ -10,6 +10,8 @@ L’objectif de ce service est de fournir trois types de stockage et un service 
 
 - Composant de caching distribué pour permettre aux applications de pouvoir mémoriser de façon temporaire les résultats des computations afin d’ augmenter les performances. Le composant de caching utilisera une API standard comme l’API JCache, utilisée aussi par Google AppEngine, et sera exposé aussi au travers d’une interface REST.
 
+Il est à noter que loin d'être exclusifs, ces services sont la plupart du temps complémentaires ("NoSQL" signifiant dans ce contexte "Not Only SQL") et utilisés conjointements par 
+
 Le travail prévu dans cette sous-tache concernera plutôt l’intégration de solutions de caching existants (comme memcached) et du développement pour les intégrer dans la plate-forme Compatible One.
 
 Chacun de ces stockages devra être autant que possible scalable et distribué, si possible sans nécessité une implication forte des développeurs (séparation des responsabilités).
@@ -26,7 +28,15 @@ Pour bien comprendre les enjeux de ce SP, comme d'ailleurs pour la plupart des a
 
 - *L'utilisation des services*: le fait pour une application d'accéder à un ou des services PaaS: CRUD sur un service de persistence, envoi de messages sur un bus de messages, etc.
 
-Mais aussi:
+Ces deux considérations sont liées à deux rôles différents (qui peuvent être remplis par deux personnes distinctes ou la même personne):
+
+- *Le développeur* choisit les différents types de service qui convient à l'application qu'il est en train de développer (ex: une base MySQL, une base reddis, une base neo4j, un stockage de blobs et un cache distribué). Grâce à l'outil en ligne de commande de Compatible One, il peut facilement déployer ces services sur son porable, ou à défaut sur un petit serveur dans son bureau ou dans le cloud, ou encore sur un serveur de qualification ou de préproduction dans le cloud.
+
+- *L'utilisateur* (aussi appelé *administrateur* ou *devops*[^5]) du PaaS qui provisionne les même services pour une utilisation en production dans le cloud, avec le niveau de performance, de redondance, et d'auto-scalabilité (lorsque cela est possible)
+
+[^5]: <http://en.wikipedia.org/wiki/DevOps>
+
+Dans le même ordre d'idée, il faut distinguer:
 
 - *Les protocoles* d'accès aux services: à l'exception du runtime qui a un statut à part, les services du PaaS sont accessible selon un protocole client-serveur qui leur est propre, et qu peut être implémenté, côté client, dans n'importe quel langage de programmation.
 
@@ -202,11 +212,23 @@ On peut distinguer dans l'écosystème NoSQL quatre grands types de bases:
 
 ## Implémentations
 
-Encore plus que pour les SGBDR, les SGBD NoSQL présentent des caractéristiques fonctionnelles et techniques extrêmement différentes les un des autres
+Encore plus que pour les SGBDR, les SGBD NoSQL présentent des caractéristiques fonctionnelles et techniques extrêmement différentes les un des autres. Il est donc illusoire de proposer un "service générique NoSQL". C'est au développeur de choisir le service qu'il veut, et à l'utlisateur de pro
 
 ## API de gestion
 
+L'API REST de gestion est similaire à ce qui a été décrit précédemment.
 
+Il faut noter une différence cependant: certaines SGBD NoSQL permettant l'autoscalabilité par simple ajout de serveurs, il doit être possible de passer en paramêtre (dans le document JSON décrivant le service) des options relatives à ces considérations, par exemple:
+
+- ajoute un nouveau serveur automatiquement si la charge, ou la taille des données gérées, dépasse un certain seuil,
+
+- passe sur un serveur avec plus de RAM si l'emprunte mémoire du serveur dépasse un certain seuil,
+
+- etc.
+
+Il est à noter que ces options sont extrêmement dépendantes du service requis.
+
+**TODO**: exemples.
 
 ## API d'usage
 
