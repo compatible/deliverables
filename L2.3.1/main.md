@@ -42,7 +42,7 @@ L'expérience (car c'est bien ainsi qu'il faut l'appeler) Google AppEngine montr
 
 Force est donc de constater que le terme "PaaS" englobe deux types de services:
 
-- Des services véritablement "internet scale", élastiques, où les développeurs peuvent puiser dans un pool de resources virtuellement infini et son facturés en fonction uniquement de leur usage effectif de ces resources.
+- Des services véritablement "internet scale", élastiques, où les développeurs peuvent puiser dans un pool de resources virtuellement infini et multitenant, et sont facturés en fonction uniquement de leur usage effectif de ces resources.
 
   Des exemples de tels services sont Amazon S3, Google BigTable ou le runtime de Google AppEngine.
 
@@ -50,22 +50,45 @@ Force est donc de constater que le terme "PaaS" englobe deux types de services:
 
   Des exemples de tels services sont Amazon RDS ou EC2.
 
-En pratique, on ne peut pas pour des raisons fondamentales, pour un certain nombre de services faire une abstraction totale de la façon dont ceux-ci sont configurés et provisionnés, 
+En pratique, on ne peut pas, pour des raisons fondamentales, pour un certain nombre de services, faire une abstraction totale de la façon dont ceux-ci sont configurés et provisionnés. Il apparaît donc pertinent de proposer à l'utilisateur du PaaS la possibilité, via une API simple, de provisionner de tels services, selon les caractéristiques qui lui conviennent. 
 
-La méthode de gestion des services pour le PaaS 
+## API pour la gestion des services
+
+TODO: Modèle DeltaCloud ? Couche de compatibilité AWS / autres ?
+
+TODO: API client (Java, Python). Extension à jcloud et libcloud?
+
+**Proposition**:
+
+- Les services sont provisionnés à l'aide d'un POST sur une URL donnée pour un client donnée (ex: http://api.compatibleone.com/nuxeo), de documents JSON qui contiennent les caractéristiques souhaitées du service PaaS: type de service, nombre de serveurs, mémoire, disque, redondance, etc.). Le POST redirige sur une URL qui est représente ensuite le service en tant que resource.
+
+- Pour détruire un service, il suffit d'un DELETE sur la resource.
+
+- Il est possible de lister les services actifs à l'aide d'un GET sur l'URL d'entrée.
+
+- Il est possible d'accéder ensuite à un service à l'aide d'une URL retournée par un GET sur la resource qui représente le service (cf. infra).
+
+**TODO**: exemples.
   
 ## L'utilisation des services
 
-**TODO**: Détailler.
+Une fois les services provisionnés, pour utiliser un des services proposés par le PaaS, le développeur peut, grâce à un simple appel de méthode, obtenir une clef d'accès au service qu'il souhaite (typiquement une URL), et utiliser ensuite cette clef pour se connecter au service.
 
+Exemples:
+
+- URL pour un stockage S3: http://s3.compatibleone.com/
+- URL pour un SGBDR: mysql://server/database
+- URL pour un cache memcached: memcached://server/...
+
+<!--===================================================================================================-->
 
 # Stockage relationnel
 
-Le stockage relationnel est le fondement la majorité des applications d'entreprises depuis une trentaine d'années, et plus récemment, depuis les années 2000 et l'avênement des architecture LAMP (Linux + Apache + MySQL + Perl/Python/PHP) ainsi que de ses variantes (e.g. Mysql + Ruby on Rails) pour les applications web.
+Le stockage relationnel est le fondement la majorité des applications d'entreprises depuis une trentaine d'années, et plus récemment, depuis les années 2000 et l'avênement des architecture LAMP (Linux + Apache + MySQL + Perl/Py\-thon/PHP) ainsi que de ses variantes (e.g. Mysql + Ruby on Rails) pour les applications web.
 
 L'augmentation du traffic des sites web depuis 10 ans, mais aussi l'apparition de nouveaux modes d'interaction plus participatifs ("Web 2.0") ont entraîné une explosion des besoins sur les SGBDR utilisés dans ce contexte, avec pour conséquence:
 
-- Le développement de mécanismes permettant d'augmenter le point à partir duquel les SGBDR ne peuvent plus suivre (ex: réplication master-slave et master-master) ou de techniques de programmation qui permettent de contourner ces contraintes (ex: sharding).
+- Le développement de mécanismes permettant d'augmenter le point à partir duquel les SGBDR ne peuvent plus suivre (ex: réplication master-slave et master-master) ou de techniques de programmation qui permettent de contourner ces contraintes (ex: décomposition fonctionnelle, sharding).
 
 - Le constat que le modèle relationnel ne permet pas une scalabilité infinie, et qu'il n'est pas non plus adapté à tous les besoins actuels[^0], et l'apparition subséquente de nouveaux modèles, popularisés à présent sous le nom "NoSQL".
 
@@ -76,7 +99,9 @@ L'augmentation du traffic des sites web depuis 10 ans, mais aussi l'apparition d
 
 Le modèle relationnel est un modèle bien ancré dans un formalisme mathématique [Codd...] et dans des specifications établies de longue date [SQL 98, etc.].
 
-Néanmoins force est de constater que deux SGBDR ne sont jamais interchangeables.
+Néanmoins force est de constater que deux SGBDR ne sont jamais interchangeables, et que certains systèmes sont plus adaptés à certains usages, et d'autres à d'autres. Par exemple, Nuxeo préfère PostgreSQL alors que ERP5 et XWiki semblent préférer MySQL.
+
+Le PaaS Compatible One ne cherchera donc pas à fournir une abstraction du modèle relationnel et du langage SQL, commune aux différentes implémentations, mais offrira un accès à ces SGBD selon leur protocole natif et leur dialect SQL propre. 
 
 ## Implémentations
 
@@ -100,39 +125,45 @@ Il peut cependant être intéressant d'explorer la possibilité d'encapsuler l'a
 
 ## API d'utilisation
 
-Paradoxalement, l
+Paradoxalement, alors que les protocoles et les dialectes SQL peuvent varier d'un SGBD à l'autre, il n'est pas déraisonnable d'utiliser une API 
 
-En Java:
+Deux exemples en Java:
 
-- JPA (ex: Hibernate)
+- Le standard JPA (implémenté par exemple par Hibernate)
 
-- DataNucleus.
+- DataNucleus, qui est mis en avant par Google dans GAE.
+
+En Python, il existe plusieurs ORM, le plus abouti semble être à ce jour SQLAlchemy, et le plus populaire celui de Django.
 
 ## API de gestion
 
+Cf. proposition générique + détailler les paramêtres spécifiques à chaque SGBD.
  
 ## Scalabilité
 
 **TODO:** auto-scaling, sharding, réplication, etc.
 
+## Facturation
+
+**TODO**.
+
+<!--===================================================================================================-->
 
 # Stockage de blobs
 
-Amazon S3 a été, avec EC2, le premier service cloud lancé par Amazon en mars 2006. De fait, 
+Amazon S3 a été, avec EC2, le premier service cloud lancé par Amazon en mars 2006. Ce service
 
-## Modèle
+## Modèle et protocole d'accès
 
-Le modèle de S3 a été repris à l'identique ou
+**TODO:** Description succinte du protocole S3.
+
+Cf. <http://en.wikipedia.org/wiki/Amazon_S3>
 
 ## Implémentations
 
 TODO: lister les services équivalent (cf. jclouds.org).
 
--> Swift d'OpenStack ?
-
-## Protocole d'accès
-
-HTTP.
+En choisir une implémentation. Par exemple Swift d'OpenStack ?
 
 ## API d'utilisation
 
@@ -142,11 +173,23 @@ Il existe une librairie qui fournit une couche d'abstraction au dessus d'un stoc
 
 ## API de gestion
 
+S3 étant "infiniement scalable", l'utilisateur n'a pas besoin de provisionner son propre service S3 (même si cela reste une possibilité).
+
+Il lui suffit de se connecter au service S3 proposé par le PaaS, en utilisant comme point d'accès une URL codée en dur.
+
+## Facturation
+
+Amazon facture son service S3 d'une part en fonction du volume stocké, d'autre part en fonction du volume transféré.
+
+<!--===================================================================================================-->
+
 # Stockage post-relationnel (NoSQL)
 
-Les limitations, pour le stockage de volume de données massifs "internet scale", du modèle relationnel ont amené depuis 5 ans un certain nombre de développeurs et de startups à créer de nouveau 
+Les limitations, pour le stockage de volume de données massifs "internet scale", du modèle relationnel ont amené depuis 5 ans un certain nombre de développeurs et de startups à créer de nouveau modèles qui présentent des caractéristiques de scalabilité différentes, ou une richesse fonctionnelle plus grande.
 
-TODO: parle du théorème CAP.
+Il s'agit d'un écosystème très riche et en évolution permanente (cf. <http://www.mynosql.com>).
+
+TODO: parler du théorème CAP.
 
 ## Modèles
 
@@ -159,18 +202,26 @@ On peut distinguer dans l'écosystème NoSQL quatre grands types de bases:
 
 ## Implémentations
 
-Encore plus que pour 
+Encore plus que pour les SGBDR, les SGBD NoSQL présentent des caractéristiques fonctionnelles et techniques extrêmement différentes les un des autres
+
+## API de gestion
+
+
 
 ## API d'usage
 
-DataNucleus ?
+En Java, il est intéressant de constater que l'API DataNucleus permet d'adresser aussi bien le stockage SQL qu'un certain nombre de SGBD NoSQL: actuellement, GoogleStorage, HBase, MongoDB + extensibilité apr plugins OSQGi.
 
+<!--===================================================================================================-->
 
 # Service de cache
 
 ## Modèle
 
 memcached, ehcache ?
+
+<http://en.wikipedia.org/wiki/Memcache>
+<http://en.wikipedia.org/wiki/Ehcache>
 
 ## Implémentations
 
@@ -182,7 +233,8 @@ Protocole memcache.
 
 ## API d'usage
 
-jcache ? (cf. google)
+Java: jcache ? (cf. google)
 
 ## API de gestion
 
+Cf. proposition générique.
