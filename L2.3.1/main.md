@@ -64,19 +64,48 @@ En pratique, on ne peut pas, pour des raisons fondamentales, pour un certain nom
 
 ## API pour la gestion des services
 
-TODO: Modèle DeltaCloud ? Couche de compatibilité AWS / autres ?
+### État de l'art
 
-TODO: API client (Java, Python). Extension à jcloud et libcloud?
+Sun Cloud API: <http://kenai.com/projects/suncloudapis/pages/HelloCloud>.
 
-**Proposition**:
+Rackspace: <http://www.rackspace.com/cloud/cloud_hosting_products/servers/api/>, comparaison avec AWS: <http://www.rackspace.com/cloud/blog/2010/06/15/a-close-look-at-the-rackspace-cloud-servers-api-and-how-it-compares-to-amazons-ec2-api/>.
 
-- Les services sont provisionnés à l'aide d'un POST sur une URL donnée pour un client donnée (ex: http://api.compatibleone.com/nuxeo), de documents JSON qui contiennent les caractéristiques souhaitées du service PaaS: type de service, nombre de serveurs, mémoire, disque, redondance, etc.). Le POST redirige sur une URL qui est représente ensuite le service en tant que resource.
+DMTF: <http://dmtf.org/standards/cloud>
+
+DeltaCloud: <http://incubator.apache.org/deltacloud/api.html>
+
+Red Hat Entreprise VM API: <http://markmc.fedorapeople.org/rhevm-api/en-US/html/>
+
+WebSphere: <http://publib.boulder.ibm.com/infocenter/wscloudb/v1r1/index.jsp?topic=/com.ibm.websphere.cloudburst.doc/ra/rer_clouds.html>
+
+OCCI: <http://ns.ggf.org/Public_Comment_Docs/Documents/2011-01/draft-occi_http_rendering.pdf>
+
+Commentaires: <http://stage.vambenepe.com/archives/863>, <http://stage.vambenepe.com/archives/894>, <http://stage.vambenepe.com/archives/1161>. 
+
+
+### Proposition 
+
+- Compatible One proposera une API REST de gestion des services.
+
+- Cette API sera générique: elle permettra de provisionner aussi bien des ressources IaaS (VM, stockage, réseau) que des services de niveau PaaS (SGBD, bus de message, container d'applications, services OSGi dans un container OSGi, services WSGI dans un serveur WSGI, jobs MapReduce, etc.).
+
+- Les services sont provisionnés à l'aide d'un POST sur une URL donnée pour un client donnée (ex: http://api.compatibleone.com/nuxeo), de documents JSON qui contiennent les caractéristiques souhaitées du service PaaS: type de service, nombre de serveurs, mémoire, disque, redondance, etc.). Le POST redirige sur une URL qui représente ensuite le service en tant que resource.
+
+- Lorsque l'on fait un GET sur l'URL d'un service, on récupère un document JSON qui représente le service: son état (démarré, en cours de démarrage, arrêté, en cours d'arrêt, en erreur, etc.), ses caractéristiques, des informations de monitoring et de metering, l'URL d'accès au service (cf. infra).
+
+- On peut modifier un service (typiquement, le démarrer / l'arrêter) à l'aide d'un PUT sur la même URL.
 
 - Pour détruire un service, il suffit d'un DELETE sur la resource.
 
 - Il est possible de lister les services actifs à l'aide d'un GET sur l'URL d'entrée.
 
-- Il est possible d'accéder ensuite à un service à l'aide d'une URL retournée par un GET sur la resource qui représente le service (cf. infra).
+- Il est aussi possible d'avoir la liste de tous les services disponibles à l'aide d'une autre URL.
+
+- Pour accéder à un service, on utilise une URL retournée contenue dans le document retourne par un GET sur la resource qui représente le service (cf. infra).
+
+**TODO**: Lien avec les API existantes? Couche de compatibilité AWS / autres?
+
+**TODO**: API client (Java, Python). Extension à jcloud et libcloud?
 
 **TODO**: exemples.
   
@@ -89,6 +118,16 @@ Exemples:
 - URL pour un stockage S3: http://s3.compatibleone.com/
 - URL pour un SGBDR: mysql://server/database
 - URL pour un cache memcached: memcached://server/...
+
+## Challenges
+
+- Modèle REST suffisamment générique pour se mapper sur différents services de cloud existants / à venir
+
+- Adresser plusieurs cas d'usage, depuis l'accès à des services hautement standardisés jusqu'à des services custom.
+
+- Séparation des rôles.
+
+- Ligne de commande vs. API.
 
 <!--===================================================================================================-->
 
