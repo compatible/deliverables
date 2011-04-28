@@ -119,9 +119,13 @@ Exemples:
 - URL pour un SGBDR: mysql://server/database
 - URL pour un cache memcached: memcached://server/...
 
-## Challenges
+## Challenges / questions ouvertes
 
-- Modèle REST suffisamment générique pour se mapper sur différents services de cloud existants / à venir
+- Sécurité. Cf. par exemple <http://www.thebuzzmedia.com/designing-a-secure-rest-api-without-oauth-authentication/>.
+
+- Modèle REST suffisamment générique pour se mapper sur les différents services de cloud existants.
+
+- Lien aves les standards (ex: OCCI, DMTF Cloud).
 
 - Adresser plusieurs cas d'usage, depuis l'accès à des services hautement standardisés jusqu'à des services custom.
 
@@ -271,7 +275,15 @@ Il est à noter que ces options sont extrêmement dépendantes du service requis
 
 ## API d'usage
 
-En Java, il est intéressant de constater que l'API DataNucleus permet d'adresser aussi bien le stockage SQL qu'un certain nombre de SGBD NoSQL: actuellement, GoogleStorage, HBase, MongoDB + extensibilité apr plugins OSQGi.
+En Java, il est intéressant de constater que l'API DataNucleus permet d'adresser aussi bien le stockage SQL qu'un certain nombre de SGBD NoSQL: actuellement, GoogleStorage, HBase, MongoDB + extensibilité apr plugins OSQGi. 
+
+## Références
+
+*MongoDB on EC2*, <http://nosql.mypopescu.com/post/5010094347/mongodb-on-ec2>.
+
+*MongoDB in the Amazon Cloud*, <http://nosql.mypopescu.com/post/4233617312/mongodb-in-the-amazon-cloud>.
+
+
 
 <!--===================================================================================================-->
 
