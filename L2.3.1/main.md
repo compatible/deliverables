@@ -107,9 +107,29 @@ Commentaires: <http://stage.vambenepe.com/archives/863>, <http://stage.vambenepe
 
 **TODO**: Lien avec les API existantes? Couche de compatibilité AWS / autres?
 
-**TODO**: API client (Java, Python). Extension à jcloud et libcloud?
+#### API client
+
+Comme l'API proposée est basée sur HTTP, un simple client capable de communiquer en utilisant ce protocole peut être utilisé pour interagir avec les services du PaaS. Ce type de clients sont disponibles dans presque la totalité des langages, et aussi en ligne de commande.
+
+Cependant, afin de faciliter l'interaction entre les clients et les services du PaaS, il serait souhaitable de leur fournir des composants qui encapsulent le dialogue avec les API REST décrites dans la section précédente. Ces composants devront être disponible dans plusieurs langages.
+
+En considérant que les use case prévus sont centrés surtout sur la plateforme Java, l'objectif c'est de fournir au moins une API client Java.
+
+Il est interessant de noter qu'ils existent déjà des projets qui fournissent une API abstraite pour l'allocation et l'utilisation de services PaaS et des instantiation de cette API vers des fournisseur de service IaaS et PaaS. Un de ces projet particulièrement actif est JCloud.
+
+L'idée serait, donc, de concevoir l'API client comme une extension de l'API JCloud:
+
+- Comme JCloud supporte seulement de composants de type Compute et Blobstore, des extension à l'API abstraite de JCloud seraient envisagées pour supporter des services comme le stockage relationnel.
+
+- Une extension aux implémentations déjà disponibles pour pouvoir effectivement utiliser les services mis à disposition par la couche PaaS de Compatible One.
+
+Ces extensions seront proposée comme contributions au projet JCloud afin de faire avancer une API prometteuse afin qu'elle aie plus de chances de s'imposer comme standard de facto.
+
+Le choix d'utiliser des API REST pour exposer les services PaaS permets aussi de fournir un client à ligne de commande. Ceci est l'approche suivi par Cloud Foundry qui expose ses fonctionnalités PaaS à travers un tel client. 
 
 **TODO**: exemples.
+
+
   
 ## L'utilisation des services
 
