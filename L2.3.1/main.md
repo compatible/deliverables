@@ -30,7 +30,7 @@ Pour bien comprendre les enjeux de ce SP, comme d'ailleurs pour la plupart des a
 
 Ces deux considérations sont liées à deux rôles différents (qui peuvent être remplis par deux personnes distinctes ou la même personne):
 
-- *Le développeur* choisit les différents types de service qui convient à l'application qu'il est en train de développer (ex: une base MySQL, une base reddis, une base neo4j, un stockage de blobs et un cache distribué). Grâce à l'outil en ligne de commande de Compatible One, il peut facilement déployer ces services sur son porable, ou à défaut sur un petit serveur dans son bureau ou dans le cloud, ou encore sur un serveur de qualification ou de préproduction dans le cloud.
+- *Le développeur* choisit les différents types de service qui convient à l'application qu'il est en train de développer (ex: une base MySQL, une base Redis, une base Neo4j, un stockage de blobs et un cache distribué). Grâce à l'outil en ligne de commande de Compatible One, il peut facilement déployer ces services sur son portable, ou à défaut sur un petit serveur dans son bureau ou dans le cloud, ou encore sur un serveur de qualification ou de préproduction dans le cloud.
 
 - *L'utilisateur* (aussi appelé *administrateur* ou *devops*[^5]) du PaaS qui provisionne les même services pour une utilisation en production dans le cloud, avec le niveau de performance, de redondance, et d'auto-scalabilité (lorsque cela est possible)
 
@@ -54,13 +54,15 @@ Force est donc de constater que le terme "PaaS" englobe deux types de services:
 
 - Des services véritablement "internet scale", élastiques, où les développeurs peuvent puiser dans un pool de resources virtuellement infini et multitenant, et sont facturés en fonction uniquement de leur usage effectif de ces resources.
   \newline
-  Des exemples de tels services sont Amazon S3, Google BigTable ou le runtime de Google AppEngine.
+  Des exemples de tels services sont Amazon S3, Google BigTable et les autres services accessible à travers le runtime de Google AppEngine (e.g., Memcache, Blob store, etc.).
 
 - Des services à la scalabilité plus limitée, qui impliquent lors de leur instanciation la réservation de resources dédiés (VM, stockage, etc.). 
   \newline
   Des exemples de tels services sont Amazon RDS ou EC2.
 
 En pratique, on ne peut pas, pour des raisons fondamentales, pour un certain nombre de services, faire une abstraction totale de la façon dont ceux-ci sont configurés et provisionnés. Il apparaît donc pertinent de proposer à l'utilisateur du PaaS la possibilité, via une API simple, de provisionner de tels services, selon les caractéristiques qui lui conviennent. 
+
+Ce provisionnement devra néanmoins s'abstraire suffisamment des détails techniques de bas niveau nécessaires à la mise en oeuvre de services correspondants. Par exemple, dans le cas d'un service de stockage relationnel,  l'API devra permettre de gérer les paramètres comme la taille de la base, mais sera opaque par rapport à l'emplacement physique des fichiers ou la configuration des utilisateurs.
 
 ## API pour la gestion des services
 
@@ -91,15 +93,15 @@ Commentaires: <http://stage.vambenepe.com/archives/863>, <http://stage.vambenepe
 
 - Les services sont provisionnés à l'aide d'un POST sur une URL donnée pour un client donnée (ex: http://api.compatibleone.com/nuxeo), de documents JSON qui contiennent les caractéristiques souhaitées du service PaaS: type de service, nombre de serveurs, mémoire, disque, redondance, etc.). Le POST redirige sur une URL qui représente ensuite le service en tant que resource.
 
-- Lorsque l'on fait un GET sur l'URL d'un service, on récupère un document JSON qui représente le service: son état (démarré, en cours de démarrage, arrêté, en cours d'arrêt, en erreur, etc.), ses caractéristiques, des informations de monitoring et de metering, l'URL d'accès au service (cf. infra).
+- Lorsque l'on fait un GET sur l'URL d'un service, on récupère un document JSON qui représente le service: son état (démarré, en cours de démarrage, arrêté, en cours d'arrêt, en erreur, etc.), ses caractéristiques, des informations de monitoring et de metering, l'URL d'accès au service (e.g., http://api.compatibleone.com/nuxeo/services/rdb/mydb1). Le format et la structure des documents JSON dépendra du service en question et fournira la possibilité de découvrir les paramètres de configuration disponibles afin de pouvoir les modifier successivement. Ceci implique que ces documents devront fournir un descriptif des paramètres (embedded ou dans un document à part) pour que les clients puissent construire des interfaces utilisateurs de façon automatique et dynamique. 
 
-- On peut modifier un service (typiquement, le démarrer / l'arrêter) à l'aide d'un PUT sur la même URL.
+- On peut modifier un service (typiquement, le démarrer / l'arrêter) à l'aide d'un PUT sur la même URL. Cette modification sera effectuée en utilisant également des documents de type JSON ayant la même structure de ceux récupérés précédemment avec des GETs sur l'URL des services. Le descriptif des paramètres guidera le client dans la construction de documents bien formés (i.e., qui contiennent les paramètres nécessaires avec des valeurs correctes) 
 
 - Pour détruire un service, il suffit d'un DELETE sur la resource.
 
-- Il est possible de lister les services actifs à l'aide d'un GET sur l'URL d'entrée.
+- Il est possible de lister les services actifs à l'aide d'un GET sur l'URL d'entrée (e.g., http://api.compatibleone.com/nuxeo/services/running).
 
-- Il est aussi possible d'avoir la liste de tous les services disponibles à l'aide d'une autre URL.
+- Il est aussi possible d'avoir la liste de tous les services disponibles à l'aide d'une autre URL (e.g., http://api.compatibleone.com/nuxeo/services).
 
 - Pour accéder à un service, on utilise une URL retournée contenue dans le document retourne par un GET sur la resource qui représente le service (cf. infra).
 
