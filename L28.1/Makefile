@@ -1,7 +1,7 @@
 #
 # Makefile for compiling LaTeX document
 #
-livrable = L2.3.1
+livrable = L28.1
 sources =
 texfiles = main.tex
 
@@ -24,5 +24,7 @@ $(livrable).pdf: master.tex $(texfiles)
 clean:
 	rm -f $(texfiles)
 	rm -f *.toc *.aux *.cov *.idx *.log *.par
+	
+tidy: clean
 	rm -f $(PDF)
 

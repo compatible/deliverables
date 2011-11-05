@@ -1,18 +1,19 @@
 #
 # Makefile for compiling LaTeX document
 #
-livrable = L29.1
+livrable = RA-POC2
 sources =
-texfiles = existant.tex besoins.tex requirements.tex
+texfiles = main.tex
 
 PDF = $(livrable).pdf
 TEX = $(texfiles)
+IMAGES = ncc-archi.pdf
 
 pdf: $(PDF)
 
 tex: $(TEX)
 
-%.tex: %.md
+%.tex: %.md $(IMAGES)
 	pandoc -f markdown -t latex -o $@ $<
 
 $(livrable).pdf: master.tex $(texfiles)

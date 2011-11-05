@@ -1,0 +1,288 @@
+%%
+%% latex coverpage for CompatibleOne deliverables and documents
+%% author Jean Parpaillon <jparpaillon@mandriva.com>
+%%
+%% this version includes jpeg and png logos: you must use pdflatex
+%%
+%% see the .tex files for documentation and examples.
+%% 
+
+
+
+\newif\if@deliverable
+\newif\if@teamreport
+\newif\if@wpreport
+\newif\if@techreport
+\DeclareOption{deliverable}
+  {\@deliverabletrue}
+\DeclareOption{teamreport}
+  {\@teamreporttrue}
+\DeclareOption{wpreport}
+  {\@wpreporttrue}
+\DeclareOption{techreport}
+  {\@techreporttrue}
+\ProcessOptions
+%
+%
+\def\reportnumber#1{\def\@reportnumber{#1}}
+\def\reportmonth#1{\def\@reportmonth{#1}}
+\def\reportyear#1{\def\@reportyear{#1}}
+\def\email#1{\def\@email{#1}}
+\def\@reportnumber{?}
+\def\@reportmonth{}
+\def\@reportyear{}
+%
+\def\COneReportNumber#1{\def\@COneReportNumber{#1}}
+\def\COneDeliverableNumber#1{\def\@COneDeliverableNumber{#1}}
+\def\COneDeliverableNumber#1{\def\@COneDeliverableNumber{#1}}
+\def\COneDeliverableTitle#1{\def\@COneDeliverableTitle{#1}}
+\def\COneDueDate#1{\def\@COneDueDate{#1}}
+\def\COneSubmissionDate#1{\def\@COneSubmissionDate{#1}}
+\def\COneLeaderName#1{\def\@COneLeaderName{#1}}
+\def\COneAuthors#1{\def\@COneAuthors{#1}}
+\def\COneDeliverableResponsible#1{\def\@COneDeliverableResponsible{#1}}
+\def\COneInstitution#1{\def\@COneInstitution{#1}}
+\def\COneInstitutionAddress#1{\def\@COneInstitutionAddress{#1}}
+\def\COneEditorAddress#1{\def\@COneEditorAddress{#1}}
+\def\COneWorkPackage#1{\def\@COneWorkPackage{#1}}
+\def\COneTaskNumber#1{\def\@COneTaskNumber{{\@COneemph Task number:} #1}}
+\def\COneVersion#1{\def\@COneVersion{#1}}
+\def\COneLastEditor#1{\def\@COneLastEditor{#1}}
+%%\def\COneReviewers#1{\def\@COneReviewersTitle{\@COnebold Reviewers:}\def\@COneReviewers{#1}}
+\def\COneReviewers#1{\@Reviewerstrue\def\@COneReviewers{#1}}
+\def\COneLastDate#1{\def\@COneLastDate{#1}}
+\def\COneDisseminationPU{\def\@COneIsPU{$\surd$}}
+\def\COneDisseminationPP{\def\@COneIsPP{$\surd$}}
+\def\COneDisseminationRE{\def\@COneIsRE{$\surd$}}
+\def\COneDisseminationCO{\def\@COneIsCO{$\surd$}}
+\newcommand{\COneRevision}[5]{\@writefile{cov}{\hline \hfil #1\hfil&#2&#3&#4&#5\\}}
+\newcommand{\COneTask}[3]{\@Taskstrue\@writefile{par}{\hline #1&#2&#3\\}}
+
+\def\@COneReportNumber{XXXX}
+\def\@COneDeliverableNumber{XXXX}
+\def\@COneDeliverableTitle{XXXX}
+\def\@COneDueDate{XXXX}
+\def\@COneSubmissionDate{XXXX}
+\def\@COneLeaderName{XXXX}
+\def\@COneDeliverableResponsible{XXXX}
+\def\@COneInstitution{XXXX}
+\def\@COneInstitutionAddress{XXXX}
+\def\@COneEditorAddress{XXXX}
+\def\@COneWorkPackage{XXXX}
+\def\@COneTaskNumber{~}
+\def\@COneVersion{XXXX}
+\def\@COneLastEditor{XXXX}
+\def\@COneReviewers{~}
+\newif\if@Reviewers
+\newif\if@Tasks
+\@Tasksfalse
+%\def\@COneReviewersTitle{~}
+\def\@COneLastDate{XXXX}
+\def\@COneIsPP{}
+\def\@COneIsPU{}
+\def\@COneIsRE{}
+\def\@COneIsCO{}
+\def\@COneRevision{}
+\def\@COneTask{}
+
+%%cover fonts
+\def\@COneCompatibleOneFont{\fontsize{24}{28}\usefont{T1}{ptm}{b}{n}\selectfont}
+\def\@COneTitleFont{\fontsize{18}{24}\usefont{T1}{ptm}{b}{n}\selectfont}
+\def\@COneLarge{\fontsize{18}{21}\usefont{T1}{ptm}{m}{n}\selectfont}
+\def\@COneSmall{\fontsize{9}{11}\usefont{T1}{ptm}{m}{n}\selectfont}
+\def\@COnefont{\fontsize{12}{12}\usefont{T1}{ptm}{m}{n}\selectfont}
+\def\@COnesc{\fontshape{sc}\selectfont}
+\def\@COneemph{\fontshape{sl}\selectfont}
+\def\@COnebold{\fontseries{b}\selectfont}
+
+
+\newdimen\COne@CoverPageWidth
+\newdimen\COne@CoverPageHeight
+\newdimen\COne@TableWidth
+\COne@CoverPageWidth=\paperwidth
+\COne@CoverPageHeight=\paperheight
+\COne@TableWidth=\paperwidth
+\advance\COne@CoverPageWidth by -1.5in
+\advance\COne@CoverPageHeight by -2in
+\advance\COne@TableWidth by -5cm
+\newdimen\COneTableWidth
+\COneTableWidth=\COne@TableWidth
+
+\newwrite\tf@cov
+\immediate\openout \tf@cov \jobname.cov\relax
+\@writefile{cov}{\fontsize{9}{11}\usefont{T1}{ptm}{m}{n}\selectfont}
+\@writefile{cov}{\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}|p{0.07\linewidth}|p{0.07\linewidth}|p{0.23\linewidth}|p{0.1\linewidth}|p{0.4\linewidth}|}}
+\@writefile{cov}{\multicolumn{5}{l}{{\fontseries{b}\selectfont Revision history:}}\\}
+\@writefile{cov}{\hline}
+\@writefile{cov}{{\fontseries{b}\selectfont Version}  &{\fontseries{b}\selectfont Date} &{\fontseries{b}\selectfont Authors} &{\fontseries{b}\selectfont Institution} & {\fontseries{b}\selectfont Section affected, comments} \\}
+
+\newwrite\tf@par
+\immediate\openout \tf@par \jobname.par\relax
+\@writefile{par}{\fontsize{9}{11}\usefont{T1}{ptm}{m}{n}\selectfont}
+\@writefile{par}{\begin{tabular*}{\linewidth}{@{\extracolsep{\fill}}|p{0.07\linewidth}|p{0.45\linewidth}|p{0.4\linewidth}|}}
+\@writefile{par}{\multicolumn{3}{l}{{\fontseries{b}\selectfont Tasks related to this deliverable:}}\\}
+\@writefile{par}{\hline}
+\@writefile{par}{{\fontseries{b}\selectfont Task No.}  &{\fontseries{b}\selectfont Task description} &{\fontseries{b}\selectfont Partners involved$^\circ$}  \\}
+
+
+\newcommand{\COne@CoverBody}{
+\@COnefont
+\parbox{\linewidth}{\centering
+ \vspace{15mm}
+ {Project no. FUI-10}\par
+ \vspace{6mm}
+ {\@COneCompatibleOneFont CompatibleOne}\par
+ \vspace{6mm} {Integrated Project}\par 
+        {\@COnesc Project description}\par 
+        {\@COnesc Open source cloudware for the creation, deployment and management of private, public and hybrid cloud platforms.}\par
+ \vspace{10mm}
+ \if@deliverable
+  {\@COneTitleFont  \@COneDeliverableTitle\\
+   \vspace{3mm}
+   \@COneDeliverableNumber}\par
+  \vspace{6mm}
+  \begin{tabular}{r@{: }l}
+   Due date of deliverable& \@COneDueDate\\
+   Actual submission date& \@COneSubmissionDate
+  \end{tabular}\par
+ \fi
+ \if@techreport
+  {\@COneTitleFont  \@COneDeliverableTitle\\
+   \vspace{3mm}}
+  {CompatibleOne Technical Report \# \@COneReportNumber}\par
+  \vspace{6mm}
+  {\@COneAuthors \vspace{1cm} }\par
+ \fi
+ \if@teamreport
+  {\@COneTitleFont  Quaterly Team Leader's Progress report\\
+   \vspace{3mm}
+   \@COneReportNumber}\par
+  \vspace{6mm}
+  {\@COneLarge -- \@COneInstitution\ --} \par
+  \vspace{6mm}
+  \begin{tabular}{r@{: }l}
+   Due date of report& \@COneDueDate\\
+   Actual submission date& \@COneSubmissionDate
+  \end{tabular}\par
+ \fi
+ \if@wpreport
+  {\@COneTitleFont  Quaterly WP Leader's Progress report\\
+   \vspace{3mm}
+   \@COneReportNumber}\par
+  \vspace{6mm}
+  {\@COneLarge -- \@COneWorkPackage\ --} \par
+  \vspace{6mm}
+  \begin{tabular}{r@{: }l}
+   Due date of report& \@COneDueDate\\
+   Actual submission date& \@COneSubmissionDate
+  \end{tabular}\par
+ \fi
+}
+\parbox{\linewidth}{\flushright
+ \vspace{10mm} 
+ \if@techreport
+    Report Registration Date: \@COneSubmissionDate
+ \else
+   {\@COneemph Start date of project:} November $1^{st}$ $2010$\par
+   \vspace{5mm}
+ \fi
+ \if@deliverable
+  {\@COneemph Type:} Deliverable\par
+  {\@COneemph WP number:} \@COneWorkPackage\par
+  {\@COneTaskNumber}\par
+  \vspace{5mm}
+  {\@COneemph Responsible institution:} \@COneDeliverableResponsible\par
+  {\@COneemph Editor \& and editor's address:} \@COneEditorAddress\par
+ \fi
+ \if@teamreport
+  \vspace{5mm}
+  {\@COneemph Report type:} Team Leader's Progress Report\par
+  \vspace{5mm}
+  {\@COneemph Name of Team leader:} \@COneLeaderName\par
+  {\@COneemph Institution \& address:} \@COneInstitutionAddress\par
+ \fi
+ \if@wpreport
+  {\@COneemph Report type:} WP Leader's Progress Report\par
+  {\@COneemph WP number:} \@COneWorkPackage\par
+  \vspace{5mm}
+  {\@COneemph Name of WP leader:} \@COneLeaderName\par
+  {\@COneemph Institution \& address:} \@COneInstitutionAddress\par
+ \fi
+}
+\vfill
+\parbox{\linewidth}{\centering
+ \vspace{5mm}
+ {Version \@COneVersion\ / Last edited by \@COneLastEditor\ / \@COneLastDate}\par
+ \vspace{5mm}}
+
+{
+\newdimen\COne@msize
+\COne@msize=\linewidth
+\advance\COne@msize by -1cm
+\advance\COne@msize by -6\tabcolsep
+\begin{tabular}{ | p{0.7cm} | p{\COne@msize} | p{0.3cm} |}
+ \hline
+ \multicolumn{3}{|c|}{{\@COnebold Project funded by ...}}\\
+ \hline
+ \multicolumn{3}{|c|}{{\@COnebold Dissemination Level}}\\
+ \hline
+ {\@COnebold PU} & Public & \@COneIsPU\\
+ \hline
+ {\@COnebold PP} & Restricted to other programme participants & \@COneIsPP\\
+ \hline
+ {\@COnebold RE} & Restricted to a group specified by the consortium & \@COneIsRE\\
+ \hline
+ {{\@COnebold CO}} & Confidential, only for members of the consortium & \@COneIsCO\\
+ \hline
+ \end{tabular}
+ }
+}
+
+\newcommand{\COne@PrintCoverPage}{\bgroup\global\setbox255\vbox{%
+ \@writefile{cov}{\hline \end{tabular*}}
+ \immediate\closeout\tf@cov
+ \@writefile{par}{\hline \multicolumn{3}{r}{~}\\}
+ \@writefile{par}{\multicolumn{3}{l}{\rule{3cm}{0.2pt} }\\}
+ \@writefile{par}{\multicolumn{3}{l}{{$^\circ$This task list may not be equivalent to the list of partners contributing as authors to the deliverable}}\\}
+ \@writefile{par}{\multicolumn{3}{l}{{$^*$Task leader}}\\}
+ \@writefile{par}{\end{tabular*}}
+ \immediate\closeout\tf@par
+ \vspace*{-.25in}%
+ \noindent\hspace*{-.25in}%
+ \rlap{
+  \begin{minipage}[t][\COne@CoverPageHeight][t]{\COne@CoverPageWidth}%
+   \parbox{\linewidth}{
+    \begin{minipage}[c]{5cm}
+     \includegraphics[width=5cm]{CompatibleOne-logo.png}
+    \end{minipage}
+   }
+   \COne@CoverBody
+  \end{minipage}
+ }%
+}\egroup\shipout\box255}
+
+
+\newcommand{\COne@PrintBackCoverPage}{\bgroup\global\setbox254\vbox{%
+ \vspace*{-.25in}%
+ \noindent\hspace*{-.25in}%
+ \rlap{\begin{minipage}[t][\COne@CoverPageHeight][t]{\COne@CoverPageWidth}%
+  \parbox{\linewidth}{
+  \input{\jobname.cov}
+  {\begin{tabular*}{\linewidth}{p{\linewidth}}
+   ~\\
+%%   \@COneReviewersTitle\\
+   \if@Reviewers
+    {\@COnebold Reviewers:}\\
+    \@COneReviewers\\
+    ~
+   \fi
+   \end{tabular*}}
+  \if@Tasks
+   \input{\jobname.par}
+  \fi
+  \end{minipage}}}%
+}\egroup\shipout\box254}
+
+
+
+\AtBeginDocument{\COne@PrintCoverPage\COne@PrintBackCoverPage\cleardoublepage}
